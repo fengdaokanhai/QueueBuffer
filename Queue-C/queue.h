@@ -9,20 +9,21 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <stdbool.h>
 
-/// ¶ÓÁĞ¿ØÖÆ½á¹¹Ìå
+/// é˜Ÿåˆ—æ§åˆ¶ç»“æ„ä½“
 typedef struct
 {
-    uint32_t read;			///< ¶ÁÖ¸Õë
-    uint32_t write;			///< Ğ´Ö¸Õë
-    uint32_t size;			///< ¶ÓÁĞ´óĞ¡(×Ö½Ú)
-    uint8_t* payload;		///< ¶ÓÁĞ¸ºÔØÊı¾İ
+    uint32_t read;			///< è¯»æŒ‡é’ˆ
+    uint32_t write;			///< å†™æŒ‡é’ˆ
+    uint32_t size;			///< é˜Ÿåˆ—å¤§å°(å­—èŠ‚)
+    uint8_t* payload;		///< é˜Ÿåˆ—è´Ÿè½½æ•°æ®
 }Queue, *QueuePtr;
 
-/// ¶ÔÆëËÄ×Ö½Ú²¢Ô¤Áô³ö¿Õ¼ä
+/// å¯¹é½å››å­—èŠ‚å¹¶é¢„ç•™å‡ºç©ºé—´
 #define QALIGN4(size)  (((size + 5) >> 2) << 2)
 
-/// º¯Êıµ¹³ö
+/// å‡½æ•°å€’å‡º
 uint32_t Queue_GetSize(const QueuePtr queue);
 uint32_t Queue_GetUsed(const QueuePtr queue);
 uint32_t Queue_GetFree(const QueuePtr queue);
@@ -32,9 +33,11 @@ void Queue_Clear(QueuePtr queue);
 void Queue_ErrBack(QueuePtr queue, uint32_t len);
 void Queue_Init(QueuePtr queue, uint32_t size, void* payload);
 void Queue_Destory(QueuePtr queue);
-int Queue_isFull(const QueuePtr queue);
-int Queue_isEmpty(const QueuePtr queue);
+bool Queue_isFull(const QueuePtr queue);
+bool Queue_isEmpty(const QueuePtr queue);
 QueuePtr Queue_Create(uint32_t size);
+bool Queue_GetByte(QueuePtr queue, uint8_t* dat);
+bool Queue_PutByte(QueuePtr queue, uint8_t dat);
 
 #endif // __QUEUE_H_
 
