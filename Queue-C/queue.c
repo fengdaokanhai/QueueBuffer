@@ -27,9 +27,9 @@ static void qmemcpy(void* dst, const void* src, uint32_t len)
 }
 
 /**
- * »ñµÃ¶ÓÁĞÊ¹ÓÃÁ¿
- * @param  queue ¶ÓÁĞ¾ä±ú
- * @return       ·µ»ØÒÑÊ¹ÓÃÁ¿
+ * è·å¾—é˜Ÿåˆ—ä½¿ç”¨é‡
+ * @param  queue é˜Ÿåˆ—å¥æŸ„
+ * @return       è¿”å›å·²ä½¿ç”¨é‡
  */
 uint32_t Queue_GetUsed(const QueuePtr queue)
 {
@@ -38,9 +38,9 @@ uint32_t Queue_GetUsed(const QueuePtr queue)
 }
 
 /**
- * »ñµÃ¶ÓÁĞ¿ÕÓà¿Õ¼ä
- * @param  queue ¶ÓÁĞ¾ä±ú
- * @return       ¶ÓÁĞ¿ÕÓàÊı
+ * è·å¾—é˜Ÿåˆ—ç©ºä½™ç©ºé—´
+ * @param  queue é˜Ÿåˆ—å¥æŸ„
+ * @return       é˜Ÿåˆ—ç©ºä½™æ•°
  */
 uint32_t Queue_GetFree(const QueuePtr queue)
 {
@@ -49,9 +49,9 @@ uint32_t Queue_GetFree(const QueuePtr queue)
 }
 
 /**
- * »ñµÃ¶ÓÁĞ´óĞ¡
- * @param  queue ¶ÓÁĞ¾ä±ú
- * @return       ¶ÓÁĞ´óĞ¡
+ * è·å¾—é˜Ÿåˆ—å¤§å°
+ * @param  queue é˜Ÿåˆ—å¥æŸ„
+ * @return       é˜Ÿåˆ—å¤§å°
  */
 uint32_t Queue_GetSize(const QueuePtr queue)
 {
@@ -59,11 +59,11 @@ uint32_t Queue_GetSize(const QueuePtr queue)
 }
 
 /**
- * ¼ì²â¶ÓÁĞÊÇ·ñÂú
+ * æ£€æµ‹é˜Ÿåˆ—æ˜¯å¦æ»¡
  * @param  queue
- * @return       1:Âú    0:·ÇÂú
+ * @return       1:æ»¡    0:éæ»¡
  */
-int Queue_isFull(const QueuePtr queue)
+bool Queue_isFull(const QueuePtr queue)
 {
 	if (queue->read == (queue->write + 1) % queue->size)
 		return 1;
@@ -72,11 +72,11 @@ int Queue_isFull(const QueuePtr queue)
 }
 
 /**
- * ¼ì²â¶ÓÁĞÊÇ·ñÎª¿Õ
+ * æ£€æµ‹é˜Ÿåˆ—æ˜¯å¦ä¸ºç©º
  * @param  queue
- * @return       1:¿Õ    fasle:·Ç¿Õ
+ * @return       1:ç©º    fasle:éç©º
  */
-int Queue_isEmpty(const QueuePtr queue)
+bool Queue_isEmpty(const QueuePtr queue)
 {
 	if (queue->read == queue->write)
 		return 1;
@@ -85,11 +85,11 @@ int Queue_isEmpty(const QueuePtr queue)
 }
 
 /**
- * Êı¾İÈë¶Ó
- * @param  queue  ¶ÓÁĞ¾ä±ú
- * @param  buf    ÒªÈë¶ÓµÄÊı¾İ
- * @param  length ÒªÈë¶ÓµÄÊı¾İ³¤¶È
- * @return        ·µ»ØÈë¶ÓµÄ×Ö½ÚÊı
+ * æ•°æ®å…¥é˜Ÿ
+ * @param  queue  é˜Ÿåˆ—å¥æŸ„
+ * @param  buf    è¦å…¥é˜Ÿçš„æ•°æ®
+ * @param  length è¦å…¥é˜Ÿçš„æ•°æ®é•¿åº¦
+ * @return        è¿”å›å…¥é˜Ÿçš„å­—èŠ‚æ•°
  */
 uint32_t Queue_Write(QueuePtr queue, const void* buf, uint32_t length)
 {
@@ -98,16 +98,16 @@ uint32_t Queue_Write(QueuePtr queue, const void* buf, uint32_t length)
 	uint32_t nwrite = 0;
 	uint32_t nfree = 0;
 
-	/* ´«ÈëµÄÊı¾İ³¤¶ÈÎª0, Ö±½Ó·µ»Ø */
+	/* ä¼ å…¥çš„æ•°æ®é•¿åº¦ä¸º0, ç›´æ¥è¿”å› */
 	if (length == 0)		return 0;
 
-	/* ¶ÓÁĞÃ»ÓĞ¿Õ¼ä, Ö±½Ó·µ»Ø */
+	/* é˜Ÿåˆ—æ²¡æœ‰ç©ºé—´, ç›´æ¥è¿”å› */
 	if ((nfree = Queue_GetFree(queue)) == 0)		return 0;
 
-	/* ¼ÆËãÊµ¼ÊÄÜ¹»Èë¶ÓµÄÊı¾İ³¤¶È */
+	/* è®¡ç®—å®é™…èƒ½å¤Ÿå…¥é˜Ÿçš„æ•°æ®é•¿åº¦ */
 	nwrite = nfree >= length ? length : nfree;
 
-	/* ÅĞ¶Ï¶ÓÁĞÊÇ·ñ¿çÎ² */
+	/* åˆ¤æ–­é˜Ÿåˆ—æ˜¯å¦è·¨å°¾ */
 	offset = queue->size - queue->write;
 	if (offset >= nwrite)
 	{
@@ -124,11 +124,11 @@ uint32_t Queue_Write(QueuePtr queue, const void* buf, uint32_t length)
 }
 
 /**
- * Êı¾İ³ö¶Ó
- * @param  queue  ¶ÓÁĞ¾ä±ú
- * @param  buf    ´æ·Å³ö¶ÓµÄÊı¾İ
- * @param  length ³ö¶ÓµÄÊı¾İ³¤¶È
- * @return        ·µ»Ø³ö¶Ó×Ö½ÚÊı
+ * æ•°æ®å‡ºé˜Ÿ
+ * @param  queue  é˜Ÿåˆ—å¥æŸ„
+ * @param  buf    å­˜æ”¾å‡ºé˜Ÿçš„æ•°æ®
+ * @param  length å‡ºé˜Ÿçš„æ•°æ®é•¿åº¦
+ * @return        è¿”å›å‡ºé˜Ÿå­—èŠ‚æ•°
  */
 uint32_t Queue_Read(QueuePtr queue, void* buf, uint32_t length)
 {
@@ -137,18 +137,18 @@ uint32_t Queue_Read(QueuePtr queue, void* buf, uint32_t length)
 	uint32_t nused = 0;
 	uint32_t nread = 0;
 
-	/* ³ö¶ÓÊı¾İ³¤¶ÈÎª0, Ö±½Ó·µ»Ø */
+	/* å‡ºé˜Ÿæ•°æ®é•¿åº¦ä¸º0, ç›´æ¥è¿”å› */
 	if (length == 0)		return 0;
 
-	/* ¼ÆËãÊµ¼ÊÄÜ¹»³ö¶ÓµÄÊı¾İ³¤¶È */
+	/* è®¡ç®—å®é™…èƒ½å¤Ÿå‡ºé˜Ÿçš„æ•°æ®é•¿åº¦ */
 	if ((nused = Queue_GetUsed(queue)) == 0)		return 0;
 
-	/* ¼ÆËãÊµ¼ÊÄÜ¹»¶Áµ½µÄÊı¾İ³¤¶È */
+	/* è®¡ç®—å®é™…èƒ½å¤Ÿè¯»åˆ°çš„æ•°æ®é•¿åº¦ */
 	nread = nused >= length ? length : nused;
 
-	/* ÅĞ¶ÏÒª¶ÁµÄÊı¾İÊÇ·ñ¿çÎ² */
+	/* åˆ¤æ–­è¦è¯»çš„æ•°æ®æ˜¯å¦è·¨å°¾ */
 	offset = queue->size - queue->read;
-	if ( offset >= nread)
+	if (offset >= nread)
 	{
 		qmemcpy(dataptr, queue->payload + queue->read, nread);
 		queue->read += nread;
@@ -164,10 +164,10 @@ uint32_t Queue_Read(QueuePtr queue, void* buf, uint32_t length)
 }
 
 /**
- * ³õÊ¼»¯Ò»¸ö¶ÓÁĞ
- * @param queue   ¶ÓÁĞ¾ä±ú
- * @param size    ¶ÓÁĞ´óĞ¡
- * @param payload ¶ÓÁĞ»º´æµØÖ·
+ * åˆå§‹åŒ–ä¸€ä¸ªé˜Ÿåˆ—
+ * @param queue   é˜Ÿåˆ—å¥æŸ„
+ * @param size    é˜Ÿåˆ—å¤§å°
+ * @param payload é˜Ÿåˆ—ç¼“å­˜åœ°å€
  */
 void Queue_Init(QueuePtr queue, uint32_t size, void* payload)
 {
@@ -178,8 +178,8 @@ void Queue_Init(QueuePtr queue, uint32_t size, void* payload)
 }
 
 /**
- * Çå¿Õ¶ÓÁĞ
- * @param queue ¶ÓÁĞ¾ä±ú
+ * æ¸…ç©ºé˜Ÿåˆ—
+ * @param queue é˜Ÿåˆ—å¥æŸ„
  */
 void Queue_Clear(QueuePtr queue)
 {
@@ -187,9 +187,9 @@ void Queue_Clear(QueuePtr queue)
 }
 
 /**
- * ¶¯Ì¬´´½¨Ò»¸ö¶ÓÁĞ
- * @param  size ¶ÓÁĞ´óĞ¡
- * @return      ³É¹¦·µ»Ø¶ÓÁĞ¶ÔÏóÖ¸Õë, Ê§°Ü·µ»ØNULL
+ * åŠ¨æ€åˆ›å»ºä¸€ä¸ªé˜Ÿåˆ—
+ * @param  size é˜Ÿåˆ—å¤§å°
+ * @return      æˆåŠŸè¿”å›é˜Ÿåˆ—å¯¹è±¡æŒ‡é’ˆ, å¤±è´¥è¿”å›NULL
  */
 QueuePtr Queue_Create(uint32_t size)
 {
@@ -213,8 +213,8 @@ QueuePtr Queue_Create(uint32_t size)
 }
 
 /**
- * ¶ÔÓÚ¶¯Ì¬´´½¨µÄ¶ÓÁĞ½øĞĞÇåÀí¹¤×÷
- * @param queue ¶ÓÁĞ¾ä±ú
+ * å¯¹äºåŠ¨æ€åˆ›å»ºçš„é˜Ÿåˆ—è¿›è¡Œæ¸…ç†å·¥ä½œ
+ * @param queue é˜Ÿåˆ—å¥æŸ„
  */
 void Queue_Destory(QueuePtr queue)
 {
@@ -225,9 +225,9 @@ void Queue_Destory(QueuePtr queue)
 }
 
 /**
- * ¶ÁÖ¸ÕëÍËºólen¸ö×Ö½Ú£¬£¡£¡£¡É÷ÓÃ£¡£¡£¡
- * @param queue ¶ÓÁĞ¾ä±ú
- * @param len   ÒªÍËºóµÄ×Ö½ÚÊı
+ * è¯»æŒ‡é’ˆé€€ålenä¸ªå­—èŠ‚ï¼Œï¼ï¼ï¼æ…ç”¨ï¼ï¼ï¼
+ * @param queue é˜Ÿåˆ—å¥æŸ„
+ * @param len   è¦é€€åçš„å­—èŠ‚æ•°
  */
 void Queue_ErrBack(const QueuePtr queue, uint32_t len)
 {
@@ -235,4 +235,40 @@ void Queue_ErrBack(const QueuePtr queue, uint32_t len)
 	queue->read = tmp < 0 ? ((uint32_t)(tmp + queue->size)) : ((uint32_t)tmp);
 }
 
+bool Queue_PutByte(QueuePtr queue, uint8_t dat)
+{
+	if(Queue_isFull(queue))
+	{
+		return false;
+	}
 
+	/* åˆ¤æ–­é˜Ÿåˆ—æ˜¯å¦è·¨å°¾ */
+	if((queue->size - queue->write) == 0)
+	{
+		queue->write = 0;
+	}
+
+	/* å†™å…¥æ•°æ® */
+	queue->payload[queue->write++] = dat;
+
+	return true;
+}
+
+bool Queue_GetByte(QueuePtr queue, uint8_t* dat)
+{
+	if(Queue_isEmpty(queue))
+	{
+		return false;
+	}
+
+	/* æ£€æŸ¥è¦è¯»çš„æ•°æ®æ˜¯å¦è·¨å°¾ */
+	if ((queue->size - queue->read) == 0)
+	{
+		queue->read = 0;
+	}
+
+	/* è¯»å–æ•°æ® */
+	*dat = queue->payload[queue->read++];
+
+	return true;
+}
