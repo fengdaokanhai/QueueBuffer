@@ -66,9 +66,9 @@ uint32_t Queue_GetSize(const QueuePtr queue)
 bool Queue_isFull(const QueuePtr queue)
 {
 	if (queue->read == (queue->write + 1) % queue->size)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 /**
@@ -79,9 +79,9 @@ bool Queue_isFull(const QueuePtr queue)
 bool Queue_isEmpty(const QueuePtr queue)
 {
 	if (queue->read == queue->write)
-		return 1;
+		return true;
 	else
-		return 0;
+		return false;
 }
 
 /**
