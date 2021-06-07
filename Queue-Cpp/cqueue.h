@@ -1,7 +1,7 @@
 /*
  * cqueue.h
  *
- *  Created on: 2020Äê9ÔÂ11ÈÕ
+ *  Created on: 2020Ã„Ãª9Ã”Ã‚11ÃˆÃ•
  *      Author: hello
  */
 
@@ -23,6 +23,7 @@ public:
 	uint32_t getFree(void);
 	uint32_t getUsed(void);
 	void clear(void);
+	void back(uint32_t len);
 private:
 	uint32_t windex;
 	uint32_t rindex;
