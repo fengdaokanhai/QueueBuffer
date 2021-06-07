@@ -1,7 +1,7 @@
 /*
  * queue.c
  *
- *  Created on: 2020Äê9ÔÂ11ÈÕ
+ *  Created on: 2020Ã„Ãª9Ã”Ã‚11ÃˆÃ•
  *      Author: hello
  */
 
@@ -129,3 +129,8 @@ void CQueue::clear()
 	windex = rindex;
 }
 
+void CQueue::back(uint32_t len)
+{
+    int tmp = rindex - len;
+    rindex = tmp < 0 ? ((uint32_t)(tmp + size)) : ((uint32_t)tmp);
+}
