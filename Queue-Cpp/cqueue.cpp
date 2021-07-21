@@ -115,8 +115,8 @@ uint32_t CQueue::getUsed()
 
 uint32_t CQueue::getFree()
 {
-	int len = rindex - windex;
-	return len > 0 ? (size - len) : (size - 1 + len);
+	int len = windex - rindex;
+	return len >= 0 ? (size - 1 - len) : (((int)-1) - len);
 }
 
 uint32_t CQueue::getSize()
