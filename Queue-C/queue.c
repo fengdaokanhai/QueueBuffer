@@ -44,11 +44,11 @@ uint32_t Queue_GetUsed(const QueuePtr queue)
  */
 uint32_t Queue_GetFree(const QueuePtr queue)
 {
-	int len = queue->read - queue->write;
-	return len > 0 ? (queue->size - len) : (queue->size - 1 + len);
+	int len = queue->write - queue->read;
+	return len >= 0 ? (queue->size - 1 - len) : (((int)-1) - len);
 }
 
-/**
+/**	
  * 获得队列大小
  * @param  queue 队列句柄
  * @return       队列大小
